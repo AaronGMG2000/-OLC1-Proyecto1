@@ -1,0 +1,12 @@
+{
+////// CONJUNTOS
+CONJ: l -> a~z;
+CONJ: d -> 0~9;
+/////// EXPRESIONES REGULARES
+ExpReg1 -> . {letra} * | "_" | {letra} {digito};
+ExpresionReg2 -> . {digito} . "." + {digito};
+RegEx3 -> . {digito} * | "." | {letra} {digito};
+%%
+%%
+ExpReg1: "hola como esta";
+}

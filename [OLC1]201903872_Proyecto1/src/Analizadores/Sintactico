@@ -1,0 +1,143 @@
+package analizadores; 
+import java_cup.runtime.*;
+
+parser code 
+{:
+    public void syntax_error(Symbol s){ 
+        System.out.println("Error Sintáctico en la Línea " + (s.left) +
+        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+    } 
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error síntactico irrecuperable en la Línea " + 
+        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
+        " no reconocido."); 
+    }  
+:} 
+
+terminal String PTCOMA,PARIZQ,PARDER,CORIZQ,CORDER, LLAVEIZ, LLAVEDER, MENOR, MAYOR, COMA;
+terminal String CONCATE, DISYUN, INTERR, MAS, GUION, POR, DIAGONAL, SEP, PT, COMILLA;
+terminal String ESPECIAL;
+terminal String FIN;
+terminal String TLD;
+terminal String COMBA;
+terminal String CONJ;
+terminal String NOTACION;
+terminal String COMBC;
+terminal String COML;
+terminal String INDICADOR;
+terminal String DOSPT;
+terminal String LETRA;
+terminal String ESPACIO;
+terminal String SIGNO;
+terminal String DIGITO;
+
+
+non terminal ini;
+non terminal Operaciones;
+non terminal Operacion;
+non terminal ALFABETO;
+non terminal String PARRAFO;
+non terminal String NOMBRE;
+non terminal String NOMBRE2;
+non terminal String EXPRESION;
+non terminal String EXPRESIONM;
+non terminal String ENTRADA;
+non terminal String CARACTER;
+non terminal String CARACTER2;
+
+precedence left MAS, POR, PT, INTERR, DISYUN;
+
+start with ini; 
+
+ini::= 
+    LLAVEIZ Operaciones FIN FIN ENTRADA LLAVEDER
+ |  LLAVEIZ Operaciones FIN FIN LLAVEDER
+;
+
+Operaciones ::=
+   Operacion Operaciones
+ | Operacion 
+ | error Operaciones
+ 
+; 
+
+Operacion ::=
+    CONJ DOSPT NOMBRE:a INDICADOR NOTACION:b PTCOMA     {:System.out.println("Conjunto: "+a+" con notación: "+b+" fue creado con exito" );:}
+ |  NOMBRE:a INDICADOR EXPRESION:b PTCOMA               {:System.out.println("Expresion: "+a+" con la notación: "+b+" fue creada con exito");:}
+ |  error FIN
+ |  error PTCOMA
+;
+
+EXPRESION::=
+    POR ALFABETO:a                              {:RESULT = "*"+a;:}
+ |  POR ALFABETO:a EXPRESION:b                  {:RESULT = "*"+a+b;:}
+ |  POR EXPRESIONM:a                            {:RESULT = "*"+a;:}
+ |  PT ALFABETO:a EXPRESION:b                   {:RESULT = "."+a+b;:}
+ |  PT EXPRESION:b ALFABETO:a                   {:RESULT = "."+a+b;:}
+ |  PT ALFABETO:a ALFABETO:b EXPRESION:c        {:RESULT = "."+a+b+c;:}
+ |  PT ALFABETO:a ALFABETO:b                    {:RESULT = "."+a+b;:}
+ |  PT EXPRESION:a EXPRESION:b                  {:RESULT = "."+a+b;:}
+ |  DISYUN ALFABETO:a ALFABETO:b                {:RESULT = "|"+a+b;:}
+ |  DISYUN ALFABETO:a ALFABETO:b EXPRESION:c    {:RESULT = "|"+a+b;:}
+ |  DISYUN ALFABETO:a EXPRESION:b               {:RESULT = "|"+a+b;:}
+ |  DISYUN EXPRESION:a ALFABETO:b               {:RESULT = "|"+a+b;:}
+ |  DISYUN EXPRESION:a EXPRESION:b              {:RESULT = "|"+a+b;:}
+ |  MAS ALFABETO:a                              {:RESULT = "+"+a;:}
+ |  MAS EXPRESIONM:a                            {:RESULT = "+"+a;:}
+ |  MAS ALFABETO:a EXPRESION:b                  {:RESULT = "+"+a+b;:}
+ |  INTERR ALFABETO:a                           {:RESULT = "?"+a;:}
+ |  INTERR EXPRESIONM:a                         {:RESULT = "?"+a;:}
+ |  INTERR ALFABETO:a EXPRESION:b               {:RESULT = "?"+a+b;:}
+;
+
+EXPRESIONM::=
+    PT ALFABETO:a EXPRESION:b                   {:RESULT = "."+a+b;:}
+ |  PT EXPRESION:b ALFABETO:a                   {:RESULT = "."+a+b;:}
+ |  PT ALFABETO:a ALFABETO:b EXPRESION:c        {:RESULT = "."+a+b+c;:}
+ |  PT ALFABETO:a ALFABETO:b                    {:RESULT = "."+a+b;:}
+ |  PT EXPRESION:a EXPRESION:b                  {:RESULT = "."+a+b;:}
+ |  DISYUN ALFABETO:a ALFABETO:b                {:RESULT = "|"+a+b;:}
+ |  DISYUN ALFABETO:a ALFABETO:b EXPRESION:c    {:RESULT = "|"+a+b;:}
+ |  DISYUN ALFABETO:a EXPRESION:b               {:RESULT = "|"+a+b;:}
+ |  DISYUN EXPRESION:a ALFABETO:b               {:RESULT = "|"+a+b;:}
+ |  DISYUN EXPRESION:a EXPRESION:b              {:RESULT = "|"+a+b;:}
+;
+
+ENTRADA::=
+    NOMBRE:a DOSPT COMILLA PARRAFO:b COMILLA PTCOMA {:System.out.println("La expresión: \""+b+"\" es valida con la expresión Regular "+a);:}
+ |  NOMBRE:a DOSPT COMILLA PARRAFO:b COMILLA PTCOMA ENTRADA {:System.out.println("La expresión: \""+b+"\" es valida con la expresión Regular "+a);:}
+
+;
+
+ALFABETO::=
+    COMILLA CARACTER:a COMILLA          {:RESULT = a; System.out.println("Alfabeto: "+a);:}
+ |  COMILLA PT:a COMILLA                {:RESULT = a; System.out.println("Alfabeto: "+a);:}
+ |  COMILLA MAS:a COMILLA               {:RESULT = a; System.out.println("Alfabeto: "+a);:} 
+ |  COMILLA POR:a COMILLA               {:RESULT = a; System.out.println("Alfabeto: "+a);:}
+ |  COMILLA INTERR:a COMILLA            {:RESULT = a; System.out.println("Alfabeto: "+a);:}
+ |  COMILLA DISYUN:a COMILLA            {:RESULT = a; System.out.println("Alfabeto: "+a);:}
+ |  LLAVEIZ NOMBRE:a LLAVEDER           {:RESULT = "{"+a+"}"; System.out.println("Alfabeto: "+a);:}
+;
+
+PARRAFO::=
+    CARACTER:a                  {:RESULT = a; System.out.println("PARRAFO: "+a);:}
+ |  CARACTER:a PARRAFO:b        {:RESULT = a+b; System.out.println("PARRAFO: "+a+b);:}
+;
+
+CARACTER::=
+    LETRA:a                     {:RESULT = a;:}
+|   SIGNO:a                     {:RESULT = a;:}
+|   DIGITO:a                    {:RESULT = a;:}
+;
+
+
+NOMBRE::=
+    LETRA:a                  {:RESULT = a;:}
+|   LETRA:a NOMBRE2:b        {:RESULT = a+b;:}
+;
+
+NOMBRE2::=
+    CARACTER:a              {:RESULT = a;:}
+|   CARACTER:a NOMBRE2:b    {:RESULT = a+b;:}
+;
