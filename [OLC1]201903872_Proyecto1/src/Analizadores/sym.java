@@ -8,42 +8,41 @@ package analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int DIAGONAL = 18;
+  public static final int DOSPT = 30;
+  public static final int GUION = 16;
+  public static final int MENOR = 9;
+  public static final int LETRA = 31;
+  public static final int SIGNO = 33;
+  public static final int COML = 29;
+  public static final int PARIZQ = 3;
+  public static final int PARDER = 4;
+  public static final int POR = 17;
   public static final int PT = 20;
+  public static final int COMA = 11;
+  public static final int LLAVEDER = 8;
+  public static final int MAYOR = 10;
+  public static final int EOF = 0;
+  public static final int DIGITO = 34;
+  public static final int DISYUN = 13;
+  public static final int CONJ = 27;
+  public static final int COMILLA = 21;
   public static final int SEP = 19;
   public static final int ESPECIAL = 22;
-  public static final int POR = 17;
-  public static final int CONJ = 26;
-  public static final int LLAVEIZ = 7;
-  public static final int LLAVEDER = 8;
-  public static final int INTERR = 14;
-  public static final int DOSPT = 31;
-  public static final int FIN = 23;
-  public static final int DISYUN = 13;
-  public static final int NOTACION = 27;
-  public static final int CORDER = 6;
-  public static final int LETRA = 32;
-  public static final int ESPACIO = 33;
-  public static final int GUION = 16;
-  public static final int CONCATE = 12;
-  public static final int COML = 29;
-  public static final int EOF = 0;
-  public static final int PARIZQ = 3;
   public static final int error = 1;
-  public static final int COMILLA = 21;
-  public static final int DIGITO = 35;
-  public static final int COMA = 11;
-  public static final int MENOR = 9;
-  public static final int MAYOR = 10;
-  public static final int SIGNO = 34;
-  public static final int TLD = 24;
-  public static final int PTCOMA = 2;
-  public static final int INDICADOR = 30;
-  public static final int PARDER = 4;
-  public static final int CORIZQ = 5;
   public static final int COMBC = 28;
-  public static final int COMBA = 25;
+  public static final int DIAGONAL = 18;
+  public static final int INTERR = 14;
+  public static final int COMBA = 26;
+  public static final int LLAVEIZ = 7;
+  public static final int CORIZQ = 5;
+  public static final int CORDER = 6;
+  public static final int ESPACIO = 32;
+  public static final int TLD = 25;
+  public static final int FIN = 23;
+  public static final int CONCATE = 12;
   public static final int MAS = 15;
+  public static final int ESPC = 24;
+  public static final int PTCOMA = 2;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -69,13 +68,12 @@ public class sym {
   "COMILLA",
   "ESPECIAL",
   "FIN",
+  "ESPC",
   "TLD",
   "COMBA",
   "CONJ",
-  "NOTACION",
   "COMBC",
   "COML",
-  "INDICADOR",
   "DOSPT",
   "LETRA",
   "ESPACIO",

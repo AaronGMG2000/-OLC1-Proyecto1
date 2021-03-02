@@ -6,6 +6,8 @@
 package olc1.pkg201903872_proyecto1;
 
 import java.io.FileInputStream;
+import Estructuras.AFD;
+import java.util.Map;
 
 /**
  *
@@ -25,7 +27,9 @@ public class OLC1201903872_Proyecto1 {
         analizadores.Sintactico pars;
         try {
             pars=new analizadores.Sintactico(new analizadores.Lexico(new FileInputStream(path)));
-            pars.parse();        
+            pars.parse();
+            Map<String, AFD> arbol = pars.LIST_AFD;
+            System.out.println(arbol);
         } catch (Exception ex) {
             System.out.println("Error fatal en compilación de entrada.");
             System.out.println("Causa: "+ex.getCause());
