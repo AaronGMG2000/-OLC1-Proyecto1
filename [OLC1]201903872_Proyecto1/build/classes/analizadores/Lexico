@@ -17,42 +17,31 @@ import java_cup.runtime.Symbol;
 BLANCOS=[ \r\t]+
 D = [0-9]
 L = [A-Za-z]
-S = [!-/\[-_\{-\}]
+S = [!-/\]-_\{-\}\[]
 ESPECIAL = (\\n|\\\'|\\\"))
+PARRAF = [\"](((\\\")|(\\n)|(\\\'))|[^\\\"\n])*[\"]
 COMENTARIO    =  ("<!"([^!>]|[^!]">"|"!"[^>])*"!>")|(\/\/(.*)*)
 %%
 
 
 {COMENTARIO} {}
 "CONJ" {return new Symbol(sym.CONJ,yyline,yychar, yytext());}
-
-"tld" {return new Symbol(sym.TLD,yyline,yychar, yytext());}
-
 ":" {return new Symbol(sym.DOSPT,yyline,yychar, yytext());}
-
 "%%" {return new Symbol(sym.FIN,yyline,yychar, yytext());} 
 
-\"  {return new Symbol(sym.COMILLA,yyline,yychar, yytext());}
 ";" {return new Symbol(sym.PTCOMA,yyline,yychar, yytext());}
 "." {return new Symbol(sym.PT,yyline,yychar, yytext());}
 "," {return new Symbol(sym.COMA,yyline,yychar, yytext());}
-"<" {return new Symbol(sym.MAYOR,yyline,yychar, yytext());}
 ">" {return new Symbol(sym.MENOR,yyline,yychar, yytext());}
 ":" {return new Symbol(sym.igual,yyline,yychar, yytext());}
 "!" {return new Symbol(sym.PTCOMA,yyline,yychar, yytext());}
 "{" {return new Symbol(sym.LLAVEIZ,yyline,yychar, yytext());} 
 "}" {return new Symbol(sym.LLAVEDER,yyline,yychar, yytext());} 
-"(" {return new Symbol(sym.PARIZQ,yyline,yychar, yytext());} 
-")" {return new Symbol(sym.PARDER,yyline,yychar, yytext());} 
-"[" {return new Symbol(sym.CORIZQ,yyline,yychar, yytext());} 
-"]" {return new Symbol(sym.CORDER,yyline,yychar, yytext());}
-"." {return new Symbol(sym.CONCATE,yyline,yychar, yytext());}
 "|" {return new Symbol(sym.DISYUN,yyline,yychar, yytext());}
 "?" {return new Symbol(sym.INTERR,yyline,yychar, yytext());} 
 "+" {return new Symbol(sym.MAS,yyline,yychar, yytext());} 
 "-" {return new Symbol(sym.GUION,yyline,yychar, yytext());} 
 "*" {return new Symbol(sym.POR,yyline,yychar, yytext());} 
-"/" {return new Symbol(sym.DIAGONAL,yyline,yychar, yytext());} 
 "~" {return new Symbol(sym.SEP,yyline,yychar, yytext());} 
 
 \n {yychar=1;}
@@ -60,7 +49,8 @@ COMENTARIO    =  ("<!"([^!>]|[^!]">"|"!"[^>])*"!>")|(\/\/(.*)*)
 {D} {return new Symbol(sym.DIGITO,yyline,yychar, yytext());}
 {S} {return new Symbol(sym.SIGNO,yyline,yychar, yytext());}
 {L} {return new Symbol(sym.LETRA,yyline,yychar, yytext());}
-"\" \"" {return new Symbol(sym.ESPACIO,yyline,yychar, yytext());}  
+"\" \"" {return new Symbol(sym.ESPACIO,yyline,yychar, yytext());}
+{PARRAF} {return new Symbol(sym.PARRAF,yyline,yychar, yytext());}
 {BLANCOS} {}
 {ESPECIAL} {return new Symbol(sym.ESPECIAL,yyline,yychar, yytext());}
 

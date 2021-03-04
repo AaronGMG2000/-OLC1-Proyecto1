@@ -10,5 +10,5 @@ package Estructuras;
  * @author Marro
  */
 public class AFN {
-    public string dato;
+    public String dato;
 }

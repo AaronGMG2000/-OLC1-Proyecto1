@@ -8,7 +8,8 @@ import Estructuras.AFD;
 
 parser code 
 {:
-    public Map<String, String> CONJ = new HashMap<>();
+    public Map<String, String> CONJ = new HashMap<>();  
+    public Map<String, String> CONJ_EXP = new HashMap<>();
     public Map<String, String> EXP_REG = new HashMap<>();
     public Map<String, AFD> LIST_AFD = new HashMap<>();
 
@@ -28,26 +29,21 @@ parser code
     }
 :} 
 
-terminal String PTCOMA,PARIZQ,PARDER,CORIZQ,CORDER, LLAVEIZ, LLAVEDER, MENOR, MAYOR, COMA;
-terminal String CONCATE, DISYUN, INTERR, MAS, GUION, POR, DIAGONAL, SEP, PT, COMILLA;
+terminal String PTCOMA, LLAVEIZ, LLAVEDER, MENOR, COMA;
+terminal String DISYUN, INTERR, MAS, GUION, POR, SEP, PT;
 terminal String ESPECIAL;
-terminal String FIN, ESPC;
-terminal String TLD;
-terminal String COMBA;
+terminal String FIN;
 terminal String CONJ;
-terminal String COMBC;
-terminal String COML;
 terminal String DOSPT;
 terminal String LETRA;
 terminal String ESPACIO;
 terminal String SIGNO;
-terminal String DIGITO;
+terminal String DIGITO, PARRAF;
 
 non terminal ini;
 non terminal Operaciones;
 non terminal Operacion;
 non terminal String ALFABETO;
-non terminal String PARRAFO;
 non terminal String NOMBRE;
 non terminal String NOMBRE2;
 non terminal HOJA EXPRESION;
@@ -75,64 +71,56 @@ Operaciones ::=
 ; 
 
 Operacion ::=
-    CONJ DOSPT NOMBRE:a GUION MENOR NOTACION:b PTCOMA     {:System.out.println("Conjunto: "+a+" con notación: "+b+" fue creado con exito" );:}
- |  NOMBRE:a GUION MENOR EXPRESION:b PTCOMA               {:LIST_AFD.put(a,new AFD(new HOJA(".", b , new HOJA("#", null, null, "hoja"), "operador"))); System.out.println("Expresion: "+a+" con la notación: "+b+" fue creada con exito");:}
+    CONJ DOSPT NOMBRE:a GUION MENOR NOTACION:b PTCOMA       {:
+                                                                if(CONJ.get(a) == null){
+                                                                    CONJ.put(a,b);
+                                                                }else{System.out.println("CONJ repetido");}
+                                                                System.out.println("Conjunto: "+a+" con notación: "+b+" fue creado con exito" );
+                                                            :}
+ |  NOMBRE:a GUION MENOR EXPRESION:b PTCOMA               {:LIST_AFD.put(a,new AFD(new HOJA(".", b , new HOJA("#", null, null, "hoja"), "."), a, CONJ_EXP)); CONJ_EXP.clear(); System.out.println("Expresion: "+a+" con la notación: "+b+" fue creada con exito");:}
  |  error PTCOMA
 ;
 
 EXPRESION::=
-    POR ALFABETO:a                              {:RESULT = new HOJA("*",new HOJA(a, null, null, "hoja"),null,"operador");System.out.println("simbolo * izquierda:"+a);:}
- |  POR EXPRESIONM:a                            {:RESULT = new HOJA("*", a ,null,"operador");System.out.println("simbolo * izquierda:"+a);:}
- |  PT ALFABETO:a EXPRESION:b                   {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"),b,"operador");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
- |  PT EXPRESION:a ALFABETO:b                   {:RESULT = new HOJA(".",a,new HOJA(b, null, null, "hoja"),"operador");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
- |  PT ALFABETO:a ALFABETO:b                    {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"),new HOJA(b, null, null, "hoja"),"operador");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
- |  PT EXPRESION:a EXPRESION:b                  {:RESULT = new HOJA(".", a, b,"operador");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
- |  DISYUN ALFABETO:a ALFABETO:b                {:RESULT = new HOJA("|",new HOJA(a, null, null, "hoja"),new HOJA(b, null, null, "hoja"),"operador");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
- |  DISYUN ALFABETO:a EXPRESION:b               {:RESULT = new HOJA("|",new HOJA(a, null, null, "hoja"),b,"operador");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
- |  DISYUN EXPRESION:a ALFABETO:b               {:RESULT = new HOJA("|",a , new HOJA(b, null, null, "hoja"),"operador");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
- |  DISYUN EXPRESION:a EXPRESION:b              {:RESULT = new HOJA("|",a , b,"operador");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
- |  MAS ALFABETO:a                              {:RESULT = new HOJA("+",new HOJA(a, null, null, "hoja"),null,"operador");System.out.println("simbolo + izquierda:"+a);:}
- |  MAS EXPRESIONM:a                            {:RESULT = new HOJA("+",a,null,"operador");System.out.println("simbolo + izquierda:"+a);:}
- |  INTERR ALFABETO:a                           {:RESULT = new HOJA("?",new HOJA(a, null, null, "hoja"),null,"operador");System.out.println("simbolo ? izquierda:"+a);:}
- |  INTERR EXPRESIONM:a                         {:RESULT = new HOJA("?",a,null,"operador");System.out.println("simbolo ? izquierda:"+a);:}
+    POR ALFABETO:a                              {:RESULT = new HOJA("*",new HOJA(a, null, null, "hoja"),null,"*");System.out.println("simbolo * izquierda:"+a);:}
+ |  POR EXPRESIONM:a                            {:RESULT = new HOJA("*", a ,null,"*");System.out.println("simbolo * izquierda:"+a);:}
+ |  PT ALFABETO:a EXPRESION:b                   {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"),b,".");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
+ |  PT EXPRESION:a ALFABETO:b                   {:RESULT = new HOJA(".",a,new HOJA(b, null, null, "hoja"),".");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
+ |  PT ALFABETO:a ALFABETO:b                    {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"),new HOJA(b, null, null, "hoja"),".");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
+ |  PT EXPRESION:a EXPRESION:b                  {:RESULT = new HOJA(".", a, b,".");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
+ |  DISYUN ALFABETO:a ALFABETO:b                {:RESULT = new HOJA("|",new HOJA(a, null, null, "hoja"),new HOJA(b, null, null, "hoja"),"|");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
+ |  DISYUN ALFABETO:a EXPRESION:b               {:RESULT = new HOJA("|",new HOJA(a, null, null, "hoja"),b,"|");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
+ |  DISYUN EXPRESION:a ALFABETO:b               {:RESULT = new HOJA("|",a , new HOJA(b, null, null, "hoja"),"|");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
+ |  DISYUN EXPRESION:a EXPRESION:b              {:RESULT = new HOJA("|",a , b,"|");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
+ |  MAS ALFABETO:a                              {:RESULT = new HOJA("+",new HOJA(a, null, null, "hoja"),null,"+");System.out.println("simbolo + izquierda:"+a);:}
+ |  MAS EXPRESIONM:a                            {:RESULT = new HOJA("+",a,null,"+");System.out.println("simbolo + izquierda:"+a);:}
+ |  INTERR ALFABETO:a                           {:RESULT = new HOJA("?",new HOJA(a, null, null, "hoja"),null,"?");System.out.println("simbolo ? izquierda:"+a);:}
+ |  INTERR EXPRESIONM:a                         {:RESULT = new HOJA("?",a,null,"?");System.out.println("simbolo ? izquierda:"+a);:}
 ;
 
 EXPRESIONM::=
-    PT ALFABETO:a EXPRESION:b                   {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"), b,"operador");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
- |  PT EXPRESION:a ALFABETO:b                   {:RESULT = new HOJA(".", a, new HOJA(b, null, null, "hoja"),"operador");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
- |  PT ALFABETO:a ALFABETO:b                    {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"), new HOJA(b, null, null, "hoja"),"operador");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
- |  PT EXPRESION:a EXPRESION:b                  {:RESULT = new HOJA(".", a, b,"operador");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
- |  DISYUN ALFABETO:a ALFABETO:b                {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"), new HOJA(b, null, null, "hoja"),"operador");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
- |  DISYUN ALFABETO:a EXPRESION:b               {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"), b,"operador");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
- |  DISYUN EXPRESION:a ALFABETO:b               {:RESULT = new HOJA(".", a, new HOJA(b, null, null, "hoja"),"operador");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
- |  DISYUN EXPRESION:a EXPRESION:b              {:RESULT = new HOJA(".", a, b,"operador");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
+    PT ALFABETO:a EXPRESION:b                   {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"), b,".");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
+ |  PT EXPRESION:a ALFABETO:b                   {:RESULT = new HOJA(".", a, new HOJA(b, null, null, "hoja"),".");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
+ |  PT ALFABETO:a ALFABETO:b                    {:RESULT = new HOJA(".",new HOJA(a, null, null, "hoja"), new HOJA(b, null, null, "hoja"),".");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
+ |  PT EXPRESION:a EXPRESION:b                  {:RESULT = new HOJA(".", a, b,".");System.out.println("simbolo: PT izquierda:"+a+" derecha: "+b);:}
+ |  DISYUN ALFABETO:a ALFABETO:b                {:RESULT = new HOJA("|",new HOJA(a, null, null, "hoja"), new HOJA(b, null, null, "hoja"),"|");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
+ |  DISYUN ALFABETO:a EXPRESION:b               {:RESULT = new HOJA("|",new HOJA(a, null, null, "hoja"), b,"|");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
+ |  DISYUN EXPRESION:a ALFABETO:b               {:RESULT = new HOJA("|", a, new HOJA(b, null, null, "hoja"),"|");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
+ |  DISYUN EXPRESION:a EXPRESION:b              {:RESULT = new HOJA("|", a, b,"|");System.out.println("simbolo: DISYUN izquierda:"+a+" derecha: "+b);:}
 ;
 
 ENTRADA::=
-    NOMBRE:a DOSPT COMILLA PARRAFO:b COMILLA PTCOMA {:System.out.println("La expresión: \""+b+"\" es valida con la expresión Regular "+a);:}
- |  NOMBRE:a DOSPT COMILLA PARRAFO:b COMILLA PTCOMA ENTRADA {:System.out.println("La expresión: \""+b+"\" es valida con la expresión Regular "+a);:}
+    NOMBRE:a DOSPT  PARRAF:b  PTCOMA {:if(LIST_AFD.get(a)!=null){LIST_AFD.get(a).ValidarCadena(b.substring(1, b.length()-1));}:}
+ |  NOMBRE:a DOSPT  PARRAF:b  PTCOMA ENTRADA {:if(LIST_AFD.get(a)!=null){LIST_AFD.get(a).ValidarCadena(b.substring(1, b.length()-1));}:}
 ;
 
 ALFABETO::=
-    COMILLA CARACTER:a COMILLA          {:RESULT = a; System.out.println("Alfabeto: "+a);:}
- |  COMILLA PT:a COMILLA                {:RESULT = a; System.out.println("Alfabeto: "+a);:}
- |  COMILLA MAS:a COMILLA               {:RESULT = a; System.out.println("Alfabeto: "+a);:} 
- |  COMILLA POR:a COMILLA               {:RESULT = a; System.out.println("Alfabeto: "+a);:}
- |  COMILLA INTERR:a COMILLA            {:RESULT = a; System.out.println("Alfabeto: "+a);:}
- |  COMILLA DISYUN:a COMILLA            {:RESULT = a; System.out.println("Alfabeto: "+a);:}
- |  COMILLA MENOR:a COMILLA            {:RESULT = a; System.out.println("Alfabeto: "+a);:}
- |  COMILLA GUION:a COMILLA            {:RESULT = a; System.out.println("Alfabeto: "+a);:}
- |  ESPECIAL:a                          {:RESULT = a; System.out.println("Alfabeto: "+a);:}
- |  ESPACIO:a                           {:RESULT = a; System.out.println("Alfabeto: "+a);:}
- |  LLAVEIZ NOMBRE:a LLAVEDER           {:RESULT = "{"+a+"}"; System.out.println("Alfabeto: "+a);:}
-;
 
-PARRAFO::=
-    ESPECIAL:a                  {:RESULT = a; System.out.println("PARRAFO: "+a);:}
- |  CARACTER:a                  {:RESULT = a; System.out.println("PARRAFO: "+a);:}
- |  CARACTER:a PARRAFO:b        {:RESULT = a+b; System.out.println("PARRAFO: "+a+b);:}
- |  GUION:a PARRAFO:b           {:RESULT = a+b; System.out.println("PARRAFO: "+a+b);:}
- |  ESPECIAL:a PARRAFO:b         {:RESULT = a+b; System.out.println("PARRAFO: "+a+b);:}
+ ESPECIAL:a                             {:RESULT = a; System.out.println("Alfabeto: "+a);:}
+ |  PARRAF:a                            {:RESULT = a.substring(1, a.length()-1); System.out.println("Alfabeto: "+a);:}
+ |  ESPARRAFPACIO:a                           {:RESULT = a.substring(1, a.length()-1); System.out.println("Alfabeto: "+a);:}
+ |  LLAVEIZ NOMBRE:a LLAVEDER           {:RESULT = a; if(CONJ_EXP.get(a)==null){ if(CONJ.get(a)!=null){CONJ_EXP.put(a,CONJ.get(a));}else{System.out.println("no existe el conunto");}}else{System.out.println("CONJ_EXP repetido");} System.out.println("Alfabeto: "+a);:}
+
 ;
 
 CARACTER::=
@@ -159,5 +147,5 @@ NOTACION::=
 
 NOTACION2::=
     CARACTER:a                         {:RESULT = a;:}
- |  CARACTER:a COMA NOTACION2:b        {:RESULT = a+" , "+b;:}
+ |  CARACTER:a COMA NOTACION2:b        {:RESULT = a+","+b;:}
 ;
