@@ -1,0 +1,53 @@
+digraph grafica{
+rankdir=LR;
+forcelabels= true;
+node [shape = circle];
+S0;
+S1;
+S2;
+S3;
+S4;
+S5;
+S6;
+S7;
+S8;
+S9;
+S10;
+S11;
+S12;
+S13;
+S14;
+S15;
+S16;
+S17;
+S18[shape = doublecircle];
+S0->S1[label="ε"]
+S1->S2[label="ε"]
+S1->S5[label="ε"]
+S2->S3[label="minus"]
+S3->S4[label="ε"]
+S5->S6[label="mayus"]
+S6->S4[label="ε"]
+S1->S2[label="@"]
+S4->S7[label="ε"]
+S4->S10[label="ε"]
+S7->S8[label="minus"]
+S8->S9[label="ε"]
+S10->S11[label="mayus"]
+S11->S9[label="ε"]
+S4->S13[label="ε"]
+S11->S12[label="ε"]
+S13->S14[label="num"]
+S14->S12[label="ε"]
+S4->S9[label="ε"]
+S4->S16[label="ε"]
+S14->S15[label="ε"]
+S16->S17[label="_"]
+S17->S15[label="ε"]
+S4->S12[label="ε"]
+S4->S18[label="ε"]
+S17->S18[label="ε"]
+S17->S12[label="ε"]
+S4->S15[label="|"]
+
+}

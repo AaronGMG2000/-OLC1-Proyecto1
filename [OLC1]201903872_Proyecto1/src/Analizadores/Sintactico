@@ -1,4 +1,4 @@
-package analizadores; 
+    package analizadores; 
 import java_cup.runtime.*;
 import java.util.HashMap;
 import java.util.List;

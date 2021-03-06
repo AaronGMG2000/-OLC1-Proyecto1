@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="3">
+        <file>
+            <url>src/Estructuras/HOJA_AFN.java</url>
+            <bookmark id="3">
+                <name/>
+                <line>72</line>
+                <key/>
+            </bookmark>
+        </file>
         <file>
             <url>src/Analizadores/Lexico</url>
             <bookmark id="1">
@@ -22,8 +30,8 @@
         <group>
             <file>file:/D:/Github/-OLC1-Proyecto1/%5BOLC1%5D201903872_Proyecto1/src/Analizadores/Lexico</file>
             <file>file:/D:/Github/-OLC1-Proyecto1/%5BOLC1%5D201903872_Proyecto1/src/olc1/pkg201903872_proyecto1/OLC1201903872_Proyecto1.java</file>
+            <file>file:/D:/Github/-OLC1-Proyecto1/%5BOLC1%5D201903872_Proyecto1/src/Estructuras/HOJA_AFN.java</file>
             <file>file:/D:/Github/-OLC1-Proyecto1/%5BOLC1%5D201903872_Proyecto1/src/Estructuras/AFD.java</file>
-            <file>file:/D:/Github/-OLC1-Proyecto1/%5BOLC1%5D201903872_Proyecto1/src/Analizadores/Sintactico.java</file>
             <file>file:/D:/Github/-OLC1-Proyecto1/%5BOLC1%5D201903872_Proyecto1/src/Analizadores/Sintactico</file>
         </group>
     </open-files>

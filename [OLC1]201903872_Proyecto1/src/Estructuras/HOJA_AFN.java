@@ -15,22 +15,23 @@ import java.util.List;
 public class HOJA_AFN {
     public String dato;
     public String identificador;
+    public String tipo;
+    public boolean terminal;
     public HOJA_AFN[] hijos;
-    public List<HOJA_AFN[]> transiciones = new ArrayList<>();
     public HOJA_AFN(String dato, String[] alfabeto, HOJA_AFN izquierda, HOJA_AFN derecha, String tipo){
-        
+        this.dato = dato;
+        this.identificador = "S";
+        this.tipo = tipo;
+        CREAR_HIJOS(tipo, izquierda, derecha, alfabeto);
     }
     public void CREAR_HIJOS(String tipo, HOJA_AFN izquierda, HOJA_AFN derecha, String[] alfabeto){
         switch(tipo){
             case ".":
-                hijos = new HOJA_AFN[2];
-                HOJA_AFN[] trans ={hijos[0],hijos[1]};
-                HOJA_AFN[] trans1 ={hijos[1],hijos[0]};
-                transiciones.add(trans);
-                transiciones.add(trans1);
+                hijos = new HOJA_AFN[3];
                 break;
             case "*":
-                hijos = new HOJA_AFN[4];
+                if(izquierda!=null){hijos = new HOJA_AFN[3];}
+                else{hijos = new HOJA_AFN[4];}
                 break;
             case "|":
                 if (izquierda!=null && derecha!=null) {
@@ -43,41 +44,63 @@ public class HOJA_AFN {
                 }
                 break;
             case "+":
-                hijos = new HOJA_AFN[4];
+                if(izquierda!=null){hijos = new HOJA_AFN[3];}
+                else{hijos = new HOJA_AFN[4];}
                 break;
             case "?":
-                hijos = new HOJA_AFN[4];
+                if(izquierda!=null){hijos = new HOJA_AFN[3];}
+                else{hijos = new HOJA_AFN[4];}
                 break;
             default:
                 break;
         }
         if(!tipo.equals("hoja")){
-            for (HOJA_AFN H: hijos) {
-                H = new HOJA_AFN("ε",null, null, null, "hoja");
-                H.identificador = "S";
+            for (int y=0;y<hijos.length;y++) {
+                hijos[y] = new HOJA_AFN("ε",null, null, null, "hoja");
+                hijos[y].identificador = "S";
             }
             if(izquierda!=null && derecha!=null){
-                hijos[0] = izquierda;
-                hijos[1] = derecha;
+                if(tipo.equals(".")){
+                    hijos[0] = izquierda;
+                    hijos[1] = derecha;
+                }else{
+                    hijos[1] = izquierda;
+                    hijos[3] = derecha;
+                }
             }else if(izquierda!=null || derecha!=null){
                 if(tipo.equals("+") || tipo.equals("*") || tipo.equals("?")){
-                    hijos[0] = izquierda;
+                    hijos[1] = izquierda;
                 }else{
                     if (izquierda!=null) {
-                        hijos[0] = izquierda;
-                        hijos[1].dato = alfabeto[0];
+                        if(tipo.equals(".")){
+                            hijos[0] = izquierda;
+                            hijos[1].dato = alfabeto[0];
+                        }else{
+                            hijos[1] = izquierda;
+                            hijos[3].dato =alfabeto[0];
+                        }
                     }else{
-                        hijos[0] = derecha;
-                        hijos[1].dato = alfabeto[0];
+                        if(tipo.equals(".")){
+                            hijos[0].dato = alfabeto[0];
+                            hijos[1] = derecha;
+                        }else{
+                            hijos[1].dato = alfabeto[0];
+                            hijos[4] = derecha;
+                        }
                     }
                 }
                 
             }else{
                if(tipo.equals("+") || tipo.equals("*") || tipo.equals("?")){
-                    hijos[0].dato = alfabeto[0];
+                    hijos[1].dato = alfabeto[0];
                 }else{
-                    hijos[0].dato = alfabeto[0];
-                    hijos[1].dato = alfabeto[1];
+                   if(tipo.equals(".")){
+                        hijos[0].dato = alfabeto[0];
+                        hijos[1].dato = alfabeto[1];
+                    }else{
+                        hijos[1].dato = alfabeto[0];
+                        hijos[4].dato = alfabeto[1];
+                    }
                 } 
             }
         }

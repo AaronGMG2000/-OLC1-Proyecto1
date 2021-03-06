@@ -21,6 +21,8 @@ import java.util.Map;
 public class AFD {
     HOJA cabeza;
     int ident = 1;
+    AFN afn;
+    int g = 0;
     Map<String, String> CONJ = new HashMap<>();
     List<String> alfabeto = new ArrayList<>();
     List<String> terminales = new ArrayList<>();
@@ -41,6 +43,8 @@ public class AFD {
         GRAFICARSIGUIENTES();
         CREARTRANSICIONES();
         GraficarAFD();
+        CrearAFN();
+        this.afn.GenerarArbol();
     }
     
     public void generarDatos(){
@@ -422,5 +426,36 @@ public class AFD {
             System.out.println("cadena: "+cadena+" no es valida con la expresion: "+this.nombre);
         }
         return respuesta;
+    }
+    
+    public void CrearAFN(){
+        this.afn = new AFN(_CrearAFN(cabeza.izquierda) , nombre);
+        afn.CREAR_AFN();
+    }
+    public HOJA_AFN _CrearAFN(HOJA nodo){
+        if (!nodo.tipo.equals("hoja")){
+            String az = "";
+            String ad = "";
+            String alfa[] = null;
+            HOJA_AFN izquierda = null;
+            HOJA_AFN derecha = null;
+            if(nodo.izquierda!=null){
+                if(!nodo.izquierda.tipo.equals("hoja")){izquierda = _CrearAFN(nodo.izquierda);}
+                else{az = nodo.izquierda.dato;}
+            }
+            if(nodo.derecha!=null){
+            if(!nodo.derecha.tipo.equals("hoja")){derecha = _CrearAFN(nodo.derecha);}
+            else{ad = nodo.derecha.dato;}}
+            
+            if (!az.isEmpty() && !ad.isEmpty()) {
+                alfa = new String[2];
+                alfa[0] = az;
+                alfa[1] = ad;
+            }else if(!az.isEmpty()){alfa = new String[1]; alfa[0] = az;}
+            else if(!ad.isEmpty()){alfa = new String[1]; alfa[0] = ad;}
+            HOJA_AFN nueva = new HOJA_AFN(nodo.dato, alfa, izquierda, derecha, nodo.tipo);
+            return nueva;
+        }
+        return new HOJA_AFN(nodo.dato, null, null, null, nodo.tipo);
     }
 }
