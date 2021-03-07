@@ -6,13 +6,20 @@
 package olc1.pkg201903872_proyecto1;
 
 import Estructuras.AFD;
+import Estructuras.Errores;
 import analizadores.Lexico;
+import Estructuras.Validation;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,6 +34,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class main extends javax.swing.JFrame {
     static String path="";
     static String name="";
+    static List<Errores> errors = new ArrayList<>();
     static String direccion = "";
     static int actual = 0;
     static Map<String, AFD> arboles = new HashMap<>();
@@ -72,17 +80,17 @@ public class main extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jLabel3 = new javax.swing.JLabel();
+        consola = new javax.swing.JTextArea();
+        error_text = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,6 +111,11 @@ public class main extends javax.swing.JFrame {
         });
 
         jButton2.setText("Analizar entradas");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         exp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -215,17 +228,35 @@ public class main extends javax.swing.JFrame {
 
         jPanel2.setForeground(new java.awt.Color(204, 204, 204));
 
-        jTextArea2.setEditable(false);
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        consola.setEditable(false);
+        consola.setColumns(20);
+        consola.setRows(5);
+        jScrollPane2.setViewportView(consola);
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel3.setText("Numero de errores: 0");
+        error_text.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        error_text.setText("Numero de errores: 0");
 
         jButton6.setText("Ver errores");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("Abrir Json");
+        jButton7.setEnabled(false);
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setText("Limpiar consola");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -236,8 +267,10 @@ public class main extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
+                        .addComponent(error_text)
                         .addGap(70, 70, 70)
                         .addComponent(jButton6)
                         .addGap(23, 23, 23))
@@ -254,14 +287,16 @@ public class main extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton6)
-                        .addComponent(jLabel3))
-                    .addComponent(jButton7))
+                        .addComponent(error_text))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton7)
+                        .addComponent(jButton8)))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Archivo");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Abrir");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -299,9 +334,6 @@ public class main extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Cerrar archivo");
-        jMenuBar1.add(jMenu2);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -328,37 +360,39 @@ public class main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    public void SeleccionarIMG(String name, String tipo){
-        switch(tipo){
-            case "Arbol":
-                direccion = "./ARBOLES_201903872/"+name+".jpg";
-                break;
-            case "Siguientes":
-                direccion = "./SIGUIENTES_201903872/"+name+".jpg";
-                break;
-            case "Transiciones":
-                direccion = "./TRANSICIONES_201903872/"+name+".jpg";
-                break;
-            case "AFD":
-                direccion = "./AFD_201903872/"+name+".jpg";
-                break;
-            case "AFND":
-                direccion = "./AFND_201903872/"+name+".jpg";
-                break;
-        }
-        try {
-            
-            ImageIcon imagen1 = new ImageIcon(direccion);
-            float relacionW = 1;
-            float relacionH = 1;
-            if (imagen1.getIconHeight() < imagen1.getIconWidth()) {
-                relacionH = ((float) imagen1.getIconHeight() / imagen1.getIconWidth());
-            } else {
-                relacionW = (float) imagen1.getIconWidth() / imagen1.getIconHeight();
+    public void SeleccionarIMG(String name, String tipo){   
+        if(!tipo.isEmpty() && !name.isEmpty()){
+            switch(tipo){
+                case "Arbol":
+                    direccion = "./ARBOLES_201903872/"+name+".jpg";
+                    break;
+                case "Siguientes":
+                    direccion = "./SIGUIENTES_201903872/"+name+".jpg";
+                    break;
+                case "Transiciones":
+                    direccion = "./TRANSICIONES_201903872/"+name+".jpg";
+                    break;
+                case "AFD":
+                    direccion = "./AFD_201903872/"+name+".jpg";
+                    break;
+                case "AFND":
+                    direccion = "./AFND_201903872/"+name+".jpg";
+                    break;
             }
-            Icon fondo1 = new ImageIcon(imagen1.getImage().getScaledInstance((int) ((float) IMG.getWidth() * relacionW), (int) ((float) IMG.getHeight() * relacionH), 100));
-            IMG.setIcon(fondo1);
-        } catch (Exception e) {
+            try {
+
+                ImageIcon imagen1 = new ImageIcon(direccion);
+                float relacionW = 1;
+                float relacionH = 1;
+                if (imagen1.getIconHeight() < imagen1.getIconWidth()) {
+                    relacionH = ((float) imagen1.getIconHeight() / imagen1.getIconWidth());
+                } else {
+                    relacionW = (float) imagen1.getIconWidth() / imagen1.getIconHeight();
+                }
+                Icon fondo1 = new ImageIcon(imagen1.getImage().getScaledInstance((int) ((float) IMG.getWidth() * relacionW), (int) ((float) IMG.getHeight() * relacionH), 100));
+                IMG.setIcon(fondo1);
+            } catch (Exception e) {
+            }
         }
     }
     
@@ -419,7 +453,10 @@ public class main extends javax.swing.JFrame {
             archivo = null;
             Editor.setText("");
             contenido = "";
+            exp.removeAllItems();
             file_name.setText("File name: Nuevo arhivo.olc");
+            jButton7.setEnabled(false);
+            IMG.setIcon(null);
         }else{
             int op = JOptionPane.showConfirmDialog(this, "¿Guardar antes de continuar?");
             if (op == 0) {
@@ -429,19 +466,24 @@ public class main extends javax.swing.JFrame {
                 path = "";
                 Editor.setText("");
                 contenido = "";
+                exp.removeAllItems();
                 archivo = null;
+                IMG.setIcon(null);
                 file_name.setText("File name: Nuevo arhivo.olc");
+                jButton7.setEnabled(false);
             }
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if (actual==0) {
-            actual = exp.getItemCount()-1;
-            exp.setSelectedIndex(actual);
-        }else{
-            actual--;
-            exp.setSelectedIndex(actual);
+        if (exp.getItemCount()>0) {
+            if (actual==0) {
+                actual = exp.getItemCount()-1;
+                exp.setSelectedIndex(actual);
+            }else{
+                actual--;
+                exp.setSelectedIndex(actual);
+            }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -449,16 +491,21 @@ public class main extends javax.swing.JFrame {
         analizadores.Sintactico pars;
         exp.removeAllItems();
         try {
+            errors.clear();
             Lexico lexical = new analizadores.Lexico(new StringReader(Editor.getText()));
             pars=new analizadores.Sintactico(lexical);
+            pars.cont = lexical.cont;
             pars.parse();
             arboles = pars.LIST_AFD;
+            errors.addAll(lexical.Errors);
+            errors.addAll(pars.Errors);
+            error_text.setText("Numero de errores: "+errors.size());
             for(AFD arbol: arboles.values()){
                 arbol.GraficarTodo();
                 exp.addItem(arbol.nombre);
             }
             exp.setSelectedIndex(0);
-            try{ Thread.sleep(500); }
+            try{ Thread.sleep(300); }
             catch(Exception e ) 
             { 
                 System.out.println("Thread Interrupted"); 
@@ -477,7 +524,6 @@ public class main extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
             ProcessBuilder p = new ProcessBuilder();
-            System.out.println();
             p.command("cmd.exe","/c",System.getProperty("user.dir")+direccion.substring(1,direccion.length()));
             p.start();
         } catch (Exception e) {
@@ -494,14 +540,126 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_expActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        if (actual== exp.getItemCount()-1) {
-            actual = 0;
-            exp.setSelectedIndex(actual);
-        }else{
-            actual++;
-            exp.setSelectedIndex(actual);
+        if (exp.getItemCount()>0) {
+            if (actual== exp.getItemCount()-1) {
+                actual = 0;
+                exp.setSelectedIndex(actual);
+            }else{
+                actual++;
+                exp.setSelectedIndex(actual);
+            }
         }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        analizadores.Sintactico pars;
+        try {
+            errors.clear();
+            Lexico lexical = new analizadores.Lexico(new StringReader(Editor.getText()));
+            pars=new analizadores.Sintactico(lexical);
+            pars.cont = lexical.cont;
+            pars.parse();
+            arboles = pars.LIST_AFD;
+            errors.addAll(lexical.Errors);
+            errors.addAll(pars.Errors);
+            error_text.setText("Numero de errores: "+errors.size());
+            List<String[]> comprobaciones = pars.Validacion;
+            FileWriter fichero;
+            PrintWriter escritor;
+            fichero = new FileWriter("./SALIDAS_201903872/"+name+".json");
+            escritor = new PrintWriter(fichero);
+            for(String[]x: comprobaciones){
+                if (arboles.get(x[0])!=null) {
+                    
+                    if(arboles.get(x[0]).ValidarCadena(x[1])){
+                        Validation val = new Validation(x[1],x[0], "Cadena Válida");
+                        escritor.print(val.toString());
+                        consola.setText(consola.getText()+"\n");
+                        consola.setText(consola.getText()+"La expresión: \""+x[1]+"\" es válida con la expresión Regular "+x[0]);
+                    }else{
+                        consola.setText(consola.getText()+"\n");
+                        consola.setText(consola.getText()+"La expresión: \""+x[1]+"\" es inválida con la expresión Regular "+x[0]);
+                    }
+                }else{
+                    System.out.println("No existe el automata");
+                }
+            }
+            File directorio = new File("./SALIDAS_201903872");
+            if (!directorio.exists()) {
+                directorio.mkdirs();
+            }
+            fichero.close();
+            jButton7.setEnabled(true);
+        } catch (Exception ex) {
+            System.out.println("Error fatal en compilación de entrada.");
+            System.out.println("Causa: "+ex.getCause());
+        } 
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        try {
+            ProcessBuilder p = new ProcessBuilder();
+            p.command("cmd.exe","/c",System.getProperty("user.dir")+"/SALIDAS_201903872/"+name+".json");
+            p.start();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+       consola.setText("");
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        File directorio = new File("./ERRORES_201903872");
+        if (!directorio.exists()) {
+            directorio.mkdirs();
+        }
+        FileWriter fichero;
+        PrintWriter escritor;
+        try
+        {
+            fichero = new FileWriter("./ERRORES_201903872/"+name+".dot");
+            escritor = new PrintWriter(fichero);
+            escritor.print("digraph grafica{\n"
+                + "rankdir=TB;\n"
+                + "forcelabels= true;\n"
+                + "node [shape = plain];\n");
+            String td = "";
+            for(Errores dato: errors){
+                td+="<tr>\n"
+                    + "<td>"+dato.numero+"</td>\n"
+                    + "<td>"+dato.tipo+"</td>\n"
+                    + "<td>"+dato.descripcion+"</td>\n"
+                    + "<td>"+dato.linea+"</td>\n"
+                    + "<td>"+dato.colummna+"</td>\n"
+                    + "</tr>\n";
+            }
+            String tabla = "<<table border = '1' cellboder = '1' cellspacing='0' cellpadding='10'>\n"
+                    + "<tr>\n"
+                    + "<td COLSPAN = '5'>TABLA DE ERRORES</td>\n"
+                    + "</tr>\n"
+                    + "<tr>\n"
+                    + "<td>#</td>\n"
+                    + "<td>Tipo</td>\n"
+                    + "<td>Descripcion</td>\n"
+                    + "<td>Linea</td>\n"
+                    + "<td>Columna</td>\n"
+                    + "</tr>\n"
+                    + td
+                    + "</table>>";
+            String text = "TABLA [label = "+tabla+"];\n";
+            escritor.print(text);
+            escritor.print("\n}");
+            fichero.close();
+            Runtime rt = Runtime.getRuntime();
+            rt.exec( "dot -Tsvg -o ./ERRORES_201903872/"+name+".svg graf ./ERRORES_201903872/"+name+".dot");
+            ProcessBuilder p = new ProcessBuilder();
+            p.command("cmd.exe","/c",System.getProperty("user.dir")+"/ERRORES_201903872/"+name+".svg");
+            p.start();
+        }catch(IOException e){
+            System.out.println("error al crear la grafica");
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -541,6 +699,8 @@ public class main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea Editor;
     private javax.swing.JLabel IMG;
+    private javax.swing.JTextArea consola;
+    private javax.swing.JLabel error_text;
     private javax.swing.JComboBox<String> exp;
     private javax.swing.JLabel file_name;
     private javax.swing.JButton jButton1;
@@ -550,11 +710,10 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -564,7 +723,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JComboBox<String> tipo;
     // End of variables declaration//GEN-END:variables
 }

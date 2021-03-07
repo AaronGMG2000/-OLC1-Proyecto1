@@ -2,7 +2,7 @@ digraph grafica{
 rankdir=LR;
 forcelabels= true;
 node [shape = plain];
-nodo1 [label = <<table border = '1' cellboder = '1' cellspacing='0' cellpadding='10'>
+nodo36 [label = <<table border = '1' cellboder = '1' cellspacing='0' cellpadding='10'>
 <tr>
 <td>ESTADO</td>
 <td>posibles</td>
@@ -11,67 +11,67 @@ nodo1 [label = <<table border = '1' cellboder = '1' cellspacing='0' cellpadding=
 <td>letra</td>
 </tr>
 <tr>
-<td> S0 {S1} </td>
+<td> S0 {1} </td>
 <td> S1 </td>
 <td> -- </td>
 <td> -- </td>
 <td> -- </td>
 </tr>
 <tr>
-<td> S1 {S2} </td>
-<td> -- </td>
-<td> S2 </td>
-<td> S3 </td>
-<td> -- </td>
-</tr>
-<tr>
-<td> S1 {S3} </td>
-<td> -- </td>
-<td> S2 </td>
-<td> S3 </td>
-<td> -- </td>
-</tr>
-<tr>
-<td> S2 {S3} </td>
+<td> S2 {3} </td>
 <td> -- </td>
 <td> -- </td>
 <td> S3 </td>
 <td> -- </td>
 </tr>
 <tr>
-<td> S3 {S4} </td>
+<td> S3 {4} </td>
 <td> -- </td>
 <td> -- </td>
 <td> S4 </td>
 <td> -- </td>
 </tr>
 <tr>
-<td> S4 {S5} </td>
+<td> S4 {5} </td>
 <td> -- </td>
 <td> -- </td>
 <td> S5 </td>
 <td> -- </td>
 </tr>
 <tr>
-<td> S5 {S6} </td>
+<td> S5 {6} </td>
 <td> -- </td>
 <td> -- </td>
 <td> -- </td>
 <td> S6 </td>
 </tr>
 <tr>
-<td> S6 {S7} </td>
+<td> S6 {7} </td>
 <td> -- </td>
 <td> -- </td>
 <td> -- </td>
 <td> S7 </td>
 </tr>
 <tr>
-<td> S7 {S8} </td>
+<td> S7 {8} </td>
 <td> -- </td>
 <td> -- </td>
 <td> -- </td>
 <td> S8 </td>
+</tr>
+<tr>
+<td> S1 {2,3} </td>
+<td> -- </td>
+<td> S2 </td>
+<td> S3 </td>
+<td> -- </td>
+</tr>
+<tr>
+<td> S8 {9} </td>
+<td> -- </td>
+<td> -- </td>
+<td> -- </td>
+<td> -- </td>
 </tr>
 </table>>];
 

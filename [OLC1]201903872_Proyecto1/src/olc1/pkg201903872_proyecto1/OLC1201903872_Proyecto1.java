@@ -20,7 +20,6 @@ public class OLC1201903872_Proyecto1 {
      */
     public static void main(String[] args) {
         // TODO code application logic here;
-        interpretar("entrada.txt");
     }
     
     private static void interpretar(String path) {

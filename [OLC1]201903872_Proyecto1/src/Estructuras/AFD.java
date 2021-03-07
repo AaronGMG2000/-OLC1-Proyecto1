@@ -41,13 +41,13 @@ public class AFD {
         generarDatos();
         CREARTRANSICIONES();
         CrearAFN();
-        GRAFICARTRANSICIONES();
     }
     
     public void GraficarTodo(){
         GRAFICARARBOL();
         GRAFICARSIGUIENTES();
         GraficarAFD();
+        GRAFICARTRANSICIONES();
         this.afn.GenerarArbol();
     }
     
