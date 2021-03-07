@@ -15,7 +15,7 @@ igusername -> . . "@" | {minus} {mayus} * | | | {minus} {mayus} {num} "_" ; // e
 !>
 fecha -> . {num} . {num} . "/" . {num} . {num} . "/" . {num} . {num} . {num} {num}; 
 erAzar -> . + {simbols} + | {minus} {mayus};
-
+P1 -> ...."a""b""c""d""e";
 %%
 %%
 igusername : "@yAsaLioComPI_1"; //correcto

@@ -13,23 +13,15 @@ S7;
 S8;
 S9;
 S10[shape = doublecircle];
-S0->S1[label="ε"]
-S1->S2[label="ε"]
-S2->S3[label="ε"]
-S3->S4[label="ε"]
-S4->S5[label="ε"]
-S5->S6[label="ε"]
-S6->S7[label="ε"]
-S7->S8[label="ε"]
-S8->S9[label="ε"]
-S9->S10[label="num"]
-S8->S9[label="num"]
-S7->S8[label="num"]
-S6->S7[label="/"]
-S5->S6[label="num"]
-S4->S5[label="num"]
-S3->S4[label="/"]
-S2->S3[label="num"]
+S0->S1[label="num"]
 S1->S2[label="num"]
+S2->S3[label="/"]
+S3->S4[label="num"]
+S4->S5[label="num"]
+S5->S6[label="/"]
+S6->S7[label="num"]
+S7->S8[label="num"]
+S8->S9[label="num"]
+S9->S10[label="num"]
 
 }

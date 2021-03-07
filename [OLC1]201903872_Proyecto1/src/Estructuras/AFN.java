@@ -38,38 +38,52 @@ public class AFN {
                 HOJA_AFN hijo2 = nodo.hijos[1];
                 if(hijo1.hijos!=null && hijo2.hijos!=null){
                     nodo.hijos[0] = _CREAR_AFN(nodo.hijos[0] , "no");
-                    HOJA_AFN[] tran = {nodo.hijos[0].hijos[hijo1.hijos.length-1], nodo.hijos[1].hijos[0]};
+                    HOJA_AFN[] tran = {nodo.hijos[0].fin, nodo.hijos[1].hijos[0]};
                     transiciones.add(tran);
-                    HOJA_AFN[] tran1 = {nodo.hijos[0].hijos[hijo1.hijos.length-1], nodo.hijos[1].hijos[0]};
-                    transiciones.add(tran1);
                     nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], "no");
-                    nodo.hijos[2].identificador = "S"+ident;
-                    ident++;
-                    HOJA_AFN[] tran2 = {nodo.hijos[1].hijos[hijo2.hijos.length-1], nodo.hijos[2]};
-                    transiciones.add(tran2);
+                    if(anterior.isEmpty()){
+                        nodo.hijos[2].identificador = "S"+ident;
+                        ident++;
+                        HOJA_AFN[] tran2 = {nodo.hijos[1].fin, nodo.hijos[2]};
+                        transiciones.add(tran2);
+                        nodo.fin = nodo.hijos[2];
+                    }else{
+                        nodo.fin = nodo.hijos[1].fin;
+                    }
                 }
                 else if(hijo1.hijos!=null || hijo2.hijos!=null){
                     if(hijo1.hijos!=null){
                         nodo.hijos[0] = _CREAR_AFN(nodo.hijos[0], "no");
-                        HOJA_AFN[] tran = {nodo.hijos[0].hijos[hijo1.hijos.length-1], nodo.hijos[1]};
+                        HOJA_AFN[] tran = {nodo.hijos[0].fin, nodo.hijos[1]};
                         nodo.hijos[1].identificador = "S"+ident;
                         ident++;
-                        nodo.hijos[2].identificador = "S"+ident;
-                        ident++;
-                        HOJA_AFN[] tran1 = {nodo.hijos[1], nodo.hijos[2]};
                         transiciones.add(tran);
-                        transiciones.add(tran1);
+                        if(anterior.isEmpty()){
+                            nodo.hijos[2].identificador = "S"+ident;
+                            ident++;
+                            HOJA_AFN[] tran1 = {nodo.hijos[1], nodo.hijos[2]};
+                            transiciones.add(tran1);
+                            nodo.fin = nodo.hijos[2];
+                        }else{
+                            nodo.fin = nodo.hijos[1];
+                        }
                     }
                     else if(hijo2.hijos!=null){
                         nodo.hijos[0].identificador = "S"+ident;
                         ident++;
                         HOJA_AFN[] tran = {nodo.hijos[0], nodo.hijos[1].hijos[0]};
                         transiciones.add(tran);
-                        nodo.hijos[2] = _CREAR_AFN(nodo.hijos[1], "no");
-                        nodo.hijos[2].identificador = "S"+ident;
-                        ident++;
-                        HOJA_AFN[] tran1 = {nodo.hijos[1].hijos[hijo2.hijos.length-1], nodo.hijos[2]};
-                        transiciones.add(tran1);
+                        nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], "no");
+                        
+                        if(anterior.isEmpty()){
+                            nodo.hijos[2].identificador = "S"+ident;
+                            ident++;
+                            HOJA_AFN[] tran1 = {nodo.hijos[1].fin, nodo.hijos[2]};
+                            transiciones.add(tran1);
+                            nodo.fin = nodo.hijos[2];
+                        }else{
+                            nodo.fin = nodo.hijos[1].fin;
+                        }
                     }
                 }
                 else{
@@ -77,17 +91,25 @@ public class AFN {
                     ident++;
                     nodo.hijos[1].identificador = "S"+ident;
                     ident++;
-                    nodo.hijos[2].identificador = "S"+ident;
-                    ident++;
+                    
                     HOJA_AFN[] tran = {nodo.hijos[0], nodo.hijos[1]};
-                    HOJA_AFN[] tran1 = {nodo.hijos[1], nodo.hijos[2]};
+                    
                     transiciones.add(tran);
-                    transiciones.add(tran1);
+                    if(!anterior.isEmpty()){
+                        nodo.fin = nodo.hijos[1];
+                    }else{
+                        nodo.hijos[2].identificador = "S"+ident;
+                        ident++;
+                        HOJA_AFN[] tran1 = {nodo.hijos[1], nodo.hijos[2]};
+                        transiciones.add(tran1);
+                        nodo.fin = nodo.hijos[2];
+                    }
+                    
                 }
                 if(anterior.isEmpty()){
                     this.aceptacion = nodo.hijos[2].identificador;
                 }else{
-                    nodo.identificador = nodo.hijos[2].identificador;
+                    nodo.identificador = nodo.hijos[0].identificador;
                 }
                 break;
             case "|":
@@ -111,14 +133,17 @@ public class AFN {
                     if(anterior.isEmpty()){
                         this.aceptacion = nodo.hijos[3].identificador;
                     }else{
-                        nodo.identificador = nodo.hijos[3].identificador;
+                        nodo.identificador = nodo.hijos[0].identificador;
+                        nodo.fin = nodo.hijos[3];
                     }
                 }else if(nodo.hijos.length==5){
                     if (nodo.hijos[1].hijos!=null) {
                         hijo1 = nodo.hijos[1];
                         hijo2 = nodo.hijos[3];
+                        nodo.hijos[0].identificador = "S"+ident;
+                        ident++;
                         nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1],"no");
-                        for(int x=0; x<nodo.hijos.length;x++){
+                        for(int x=1; x<nodo.hijos.length;x++){
                             if(x!=1){
                                 nodo.hijos[x].identificador = "S"+ident;
                                 ident++;
@@ -126,7 +151,7 @@ public class AFN {
                         }
                         HOJA_AFN[] tran = {nodo.hijos[0], nodo.hijos[1].hijos[0]};
                         HOJA_AFN[] tran1 = {nodo.hijos[0], nodo.hijos[3]};
-                        HOJA_AFN[] tran2 = {nodo.hijos[1].hijos[hijo1.hijos.length-1], nodo.hijos[2]};
+                        HOJA_AFN[] tran2 = {nodo.hijos[1].fin, nodo.hijos[2]};
                         HOJA_AFN[] tran4 = {nodo.hijos[3], nodo.hijos[4]};
                         HOJA_AFN[] tran5 = {nodo.hijos[4], nodo.hijos[2]};
                         transiciones.add(tran);
@@ -137,7 +162,8 @@ public class AFN {
                         if(anterior.isEmpty()){
                             this.aceptacion = nodo.hijos[2].identificador;
                         }else{
-                            nodo.identificador = nodo.hijos[2].identificador;
+                            nodo.identificador = nodo.hijos[0].identificador;
+                            nodo.fin = nodo.hijos[2];
                         }
                     }else{
                         hijo1 = nodo.hijos[1];
@@ -155,78 +181,78 @@ public class AFN {
                         transiciones.add(tran3);
                         transiciones.add(tran1);
                         nodo.hijos[4] = _CREAR_AFN(nodo.hijos[4], "no");
-                        HOJA_AFN[] tran4 = {nodo.hijos[4].hijos[hijo2.hijos.length-1], nodo.hijos[3]};
+                        HOJA_AFN[] tran4 = {nodo.hijos[4].fin, nodo.hijos[3]};
                         transiciones.add(tran4);
                         if(anterior.isEmpty()){
                             this.aceptacion = nodo.hijos[3].identificador;
                         }else{
-                            nodo.identificador = nodo.hijos[3].identificador;
+                            nodo.identificador = nodo.hijos[0].identificador;
+                            nodo.fin = nodo.hijos[3];
                         }
                     }
                 }else{
-                    if(anterior.isEmpty()){
-                        nodo.hijos[2].terminal=true;
-                    }
                     hijo1 = nodo.hijos[1];
                     hijo2 = nodo.hijos[3];
+                    nodo.hijos[0].identificador = "S"+ident;
+                    ident++;
                     HOJA_AFN[] tran = {nodo.hijos[0], nodo.hijos[1].hijos[0]};
                     HOJA_AFN[] tran1 = {nodo.hijos[0], nodo.hijos[3].hijos[0]};
                     transiciones.add(tran);
                     transiciones.add(tran1);
                     nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], "no");
-                    for(int x=0; x<4;x++){
+                    for(int x=1; x<4;x++){
                         if(x!=1 && x!=3){
                             nodo.hijos[x].identificador = "S"+ident;
                             ident++;
                         }
                     }
-                    HOJA_AFN[] tran2 = {nodo.hijos[1].hijos[hijo1.hijos.length-1], nodo.hijos[2]};
+                    HOJA_AFN[] tran2 = {nodo.hijos[1].fin, nodo.hijos[2]};
                     transiciones.add(tran2);
-                    nodo.hijos[3] = _CREAR_AFN(nodo.hijos[3], hijo1.hijos[hijo1.hijos.length-1].identificador);
-                    HOJA_AFN[] tran3 = {nodo.hijos[3].hijos[hijo2.hijos.length-1], nodo.hijos[2]};
+                    nodo.hijos[3] = _CREAR_AFN(nodo.hijos[3], "no");
+                    HOJA_AFN[] tran3 = {nodo.hijos[3].fin, nodo.hijos[2]};
                     transiciones.add(tran3);
                     if(anterior.isEmpty()){
                         this.aceptacion = nodo.hijos[2].identificador;
                     }else{
-                        nodo.identificador = nodo.hijos[2].identificador;
+                        nodo.identificador = nodo.hijos[0].identificador;
+                        nodo.fin = nodo.hijos[2];
                     }
                 }
                 break;
             case "?":
                     if(nodo.hijos[1].hijos!=null){
+                        nodo.hijos[0].identificador = "S"+ident;
+                        ident++;
                         hijo1 = nodo.hijos[1];
-                        if(anterior.isEmpty()){
-                            nodo.hijos[2].terminal=true;
-                        }
-                        HOJA_AFN[] trand = {nodo.hijos[0], nodo.hijos[1].hijos[1]};
-                        nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], nodo.hijos[0].identificador);
+                        nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], "no");
+                        HOJA_AFN[] trand = {nodo.hijos[0], nodo.hijos[1].hijos[0]};
+                        HOJA_AFN[] trand1 = {nodo.hijos[0], nodo.hijos[2]};
+                        HOJA_AFN[] trand2 = {nodo.hijos[1].fin, nodo.hijos[2]};
                         for(int x=1; x<nodo.hijos.length;x++){
                             if(x!=1){
                                 nodo.hijos[x].identificador = "S"+ident;
                                 ident++;
                             }
                         }
-                        HOJA_AFN[] trand1 = {nodo.hijos[0], nodo.hijos[2]};
-                        HOJA_AFN[] trand2 = {nodo.hijos[1].hijos[hijo1.hijos.length-1], nodo.hijos[2]};
                         transiciones.add(trand);
                         transiciones.add(trand1);
                         transiciones.add(trand2);
                         if(anterior.isEmpty()){
                             this.aceptacion = nodo.hijos[2].identificador;
                         }else{
-                            nodo.identificador = nodo.hijos[2].identificador;
+                            nodo.identificador = nodo.hijos[0].identificador;
+                            nodo.fin = nodo.hijos[2];
                         }
                     }
                     else{
-                        if(anterior.isEmpty()){
-                            nodo.hijos[3].terminal=true;
-                        }
+                        nodo.hijos[0].identificador = "S"+ident;
+                        ident++;
                         hijo1 = nodo.hijos[1];
                         HOJA_AFN[] trand  = {nodo.hijos[0], nodo.hijos[1]};
                         HOJA_AFN[] trand1 = {nodo.hijos[0], nodo.hijos[3]};
                         HOJA_AFN[] trand2 = {nodo.hijos[1], nodo.hijos[2]};
                         HOJA_AFN[] trand4 = {nodo.hijos[2], nodo.hijos[3]};
-                        for(int x=0; x<nodo.hijos.length;x++){
+                        for(int x=1; x<nodo.hijos.length;x++){
                                 nodo.hijos[x].identificador = "S"+ident;
                                 ident++;
                         }
@@ -237,70 +263,79 @@ public class AFN {
                         if(anterior.isEmpty()){
                             this.aceptacion = nodo.hijos[3].identificador;
                         }else{
-                            nodo.identificador = nodo.hijos[3].identificador;
+                            nodo.identificador = nodo.hijos[0].identificador;
+                            nodo.fin = nodo.hijos[3];
                         }
                     }
                 break;
             case "+":
                     if(nodo.hijos[1].hijos!=null){
-                        if(anterior.isEmpty()){
-                            nodo.hijos[2].terminal=true;
+                        int k =2;
+                        if (anterior.isEmpty()) {
+                            k=3;
                         }
+                        nodo.hijos[0].identificador = "S"+ident;
+                        ident++;
                         hijo1 = nodo.hijos[1];
-                        nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], nodo.hijos[0].identificador);
-                        HOJA_AFN[] trand = {nodo.hijos[0], nodo.hijos[1].hijos[1]};
-                        HOJA_AFN[] trand2 = {nodo.hijos[1].hijos[hijo1.hijos.length-1], nodo.hijos[2]};
-                        HOJA_AFN[] trand3 = {nodo.hijos[1].hijos[hijo1.hijos.length-1], nodo.hijos[1].hijos[1]};
-                        for(int x=0; x<nodo.hijos.length;x++){
+                        nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], "no");
+                        HOJA_AFN[] trand = {nodo.hijos[0], nodo.hijos[1].hijos[0]};
+                        
+                        HOJA_AFN[] trand3 = {nodo.hijos[1].fin, nodo.hijos[1].hijos[0]};
+                        for(int x=1; x<k;x++){
                             if(x!=1){
                                 nodo.hijos[x].identificador = "S"+ident;
                                 ident++;
                             }
                         }
                         transiciones.add(trand);
-                        transiciones.add(trand2);
                         transiciones.add(trand3);
                         if(anterior.isEmpty()){
+                            HOJA_AFN[] trand2 = {nodo.hijos[1].fin, nodo.hijos[2]};
+                            transiciones.add(trand2);
                             this.aceptacion = nodo.hijos[2].identificador;
                         }else{
-                            nodo.identificador = nodo.hijos[2].identificador;
+                            nodo.identificador = nodo.hijos[0].identificador;
+                            nodo.fin = nodo.hijos[1].fin;
                         }
                     }
                     else{
-                        if(anterior.isEmpty()){
-                            nodo.hijos[3].terminal=true;
+                        int k =3;
+                        if (anterior.isEmpty()) {
+                            k=4;
                         }
+                        nodo.hijos[0].identificador = "S"+ident;
+                        ident++;
                         hijo1 = nodo.hijos[1];
                         HOJA_AFN[] trand  = {nodo.hijos[0], nodo.hijos[1]};
                         HOJA_AFN[] trand2 = {nodo.hijos[1], nodo.hijos[2]};
                         HOJA_AFN[] trand3 = {nodo.hijos[2], nodo.hijos[1]};
-                        HOJA_AFN[] trand4 = {nodo.hijos[2], nodo.hijos[3]};
-                        for(int x=1; x<nodo.hijos.length;x++){
+                        for(int x=1; x<k;x++){
                                 nodo.hijos[x].identificador = "S"+ident;
                                 ident++;
                         }
                         transiciones.add(trand);
                         transiciones.add(trand2);
                         transiciones.add(trand3);
-                        transiciones.add(trand4);
                         if(anterior.isEmpty()){
+                            HOJA_AFN[] trand4 = {nodo.hijos[2], nodo.hijos[3]};
+                            transiciones.add(trand4);
                             this.aceptacion = nodo.hijos[3].identificador;
                         }else{
-                            nodo.identificador = nodo.hijos[3].identificador;
+                            nodo.identificador = nodo.hijos[0].identificador;
+                            nodo.fin = nodo.hijos[2];
                         }
                     }
                 break;
             case "*":
                     if(nodo.hijos[1].hijos!=null){
-                        if(anterior.isEmpty()){
-                            nodo.hijos[2].terminal=true;
-                        }
+                        nodo.hijos[0].identificador = "S"+ident;
+                        ident++;
                         hijo1 = nodo.hijos[1];
-                        nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], nodo.hijos[0].identificador);
-                        HOJA_AFN[] trand = {nodo.hijos[0], nodo.hijos[1].hijos[1]};
+                        nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], "no");
+                        HOJA_AFN[] trand = {nodo.hijos[0], nodo.hijos[1].hijos[0]};
                         HOJA_AFN[] trand1 = {nodo.hijos[0], nodo.hijos[2]};
-                        HOJA_AFN[] trand2 = {nodo.hijos[1].hijos[hijo1.hijos.length-1], nodo.hijos[2]};
-                        HOJA_AFN[] trand3 = {nodo.hijos[1].hijos[hijo1.hijos.length-1], nodo.hijos[1].hijos[1]};
+                        HOJA_AFN[] trand2 = {nodo.hijos[1].fin, nodo.hijos[2]};
+                        HOJA_AFN[] trand3 = {nodo.hijos[1].fin, nodo.hijos[1].hijos[0]};
                         for(int x=1; x<nodo.hijos.length;x++){
                             if(x!=1){
                                 nodo.hijos[x].identificador = "S"+ident;
@@ -314,13 +349,13 @@ public class AFN {
                         if(anterior.isEmpty()){
                             this.aceptacion = nodo.hijos[2].identificador;
                         }else{
-                            nodo.identificador = nodo.hijos[2].identificador;
+                            nodo.identificador = nodo.hijos[0].identificador;
+                            nodo.fin = nodo.hijos[2];
                         }
                     }
                     else{
-                        if(anterior.isEmpty()){
-                            nodo.hijos[3].terminal=true;
-                        }
+                        nodo.hijos[0].identificador = "S"+ident;
+                        ident++;
                         hijo1 = nodo.hijos[1];
                         HOJA_AFN[] trand  = {nodo.hijos[0], nodo.hijos[1]};
                         HOJA_AFN[] trand1 = {nodo.hijos[0], nodo.hijos[3]};
@@ -339,7 +374,8 @@ public class AFN {
                         if(anterior.isEmpty()){
                             this.aceptacion = nodo.hijos[3].identificador;
                         }else{
-                            nodo.identificador = nodo.hijos[3].identificador;
+                            nodo.identificador = nodo.hijos[0].identificador;
+                            nodo.fin = nodo.hijos[3];
                         }
                     }
                 break;
@@ -369,7 +405,14 @@ public class AFN {
                 }else{escritor.print("S"+x+";\n");}
             }
             for(HOJA_AFN[] tran: transiciones){
-                String tra = tran[0].identificador+"->"+tran[1].identificador+"[label=\""+tran[0].dato+"\"]";
+                String label = tran[0].dato;
+                if (label.equals(" ")) {
+                    label = "\\\" \\\"";
+                }
+                if (label.equals("\\n")) {
+                    label = "\\\\n";
+                }
+                String tra = tran[0].identificador+"->"+tran[1].identificador+"[label=\""+label+"\"]";
                 if(!T.contains(tra)){
                     T.add(tra);
                     escritor.print(tra+"\n");

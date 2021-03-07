@@ -16,6 +16,7 @@ public class HOJA_AFN {
     public String dato;
     public String identificador;
     public String tipo;
+    public HOJA_AFN fin;
     public boolean terminal;
     public HOJA_AFN[] hijos;
     public HOJA_AFN(String dato, String[] alfabeto, HOJA_AFN izquierda, HOJA_AFN derecha, String tipo){
