@@ -1,0 +1,53 @@
+digraph grafica{
+rankdir=TB;
+forcelabels= true;
+node [shape = plain];
+TABLA [label = <<table border = '1' cellboder = '1' cellspacing='0' cellpadding='10'>
+<tr>
+<td COLSPAN = '5'>#</td>
+</tr>
+<tr>
+<td>#</td>
+<td>Tipo</td>
+<td>Descripcion</td>
+<td>Linea</td>
+<td>Columna</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Léxico</td>
+<td>El caracter \ no pertenece al lenguaje</td>
+<td>21</td>
+<td>9</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Sintáctico</td>
+<td>No se esperaba este componente: :</td>
+<td>7</td>
+<td>78</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Sintáctico</td>
+<td>Error en operación no se esperaba el componente: B</td>
+<td>8</td>
+<td>16</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Sintáctico</td>
+<td>Error en operación no se esperaba el componente: :</td>
+<td>9</td>
+<td>6</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Sintáctico</td>
+<td>Error en operación no se esperaba el componente: "</td>
+<td>21</td>
+<td>8</td>
+</tr>
+</table>>];
+
+}

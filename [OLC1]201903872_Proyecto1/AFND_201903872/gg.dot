@@ -1,0 +1,11 @@
+digraph grafica{
+rankdir=LR;
+forcelabels= true;
+node [shape = circle];
+S0;
+S1;
+S2[shape = doublecircle];
+S0->S1[label="notacion"]
+S1->S2[label="notacion"]
+
+}

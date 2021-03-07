@@ -1,5 +1,8 @@
 package analizadores;
 import java_cup.runtime.Symbol; 
+import Estructuras.Errores;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Lexico implements java_cup.runtime.Scanner {
@@ -12,6 +15,9 @@ public class Lexico implements java_cup.runtime.Scanner {
 	private final int YY_NO_ANCHOR = 4;
 	private final int YY_BOL = 65536;
 	private final int YY_EOF = 65537;
+
+    public List<Errores> Errors = new ArrayList<>();
+    public int cont = 1;
 	private java.io.BufferedReader yy_reader;
 	private int yy_buffer_index;
 	private int yy_buffer_read;
@@ -50,8 +56,8 @@ public class Lexico implements java_cup.runtime.Scanner {
 		yy_at_bol = true;
 		yy_lexical_state = YYINITIAL;
  
-    yyline = 1; 
-    yychar = 1; 
+    yyline = 1;
+    yychar = 1;
 	}
 
 	private boolean yy_eof_done = false;
@@ -237,40 +243,45 @@ public class Lexico implements java_cup.runtime.Scanner {
 		/* 24 */ YY_NO_ANCHOR,
 		/* 25 */ YY_NO_ANCHOR,
 		/* 26 */ YY_NO_ANCHOR,
-		/* 27 */ YY_NO_ANCHOR,
-		/* 28 */ YY_NOT_ACCEPT,
+		/* 27 */ YY_NOT_ACCEPT,
+		/* 28 */ YY_NO_ANCHOR,
 		/* 29 */ YY_NO_ANCHOR,
 		/* 30 */ YY_NO_ANCHOR,
 		/* 31 */ YY_NO_ANCHOR,
 		/* 32 */ YY_NO_ANCHOR,
-		/* 33 */ YY_NOT_ACCEPT,
-		/* 34 */ YY_NO_ANCHOR,
+		/* 33 */ YY_NO_ANCHOR,
+		/* 34 */ YY_NOT_ACCEPT,
 		/* 35 */ YY_NO_ANCHOR,
 		/* 36 */ YY_NOT_ACCEPT,
 		/* 37 */ YY_NO_ANCHOR,
 		/* 38 */ YY_NOT_ACCEPT,
-		/* 39 */ YY_NOT_ACCEPT,
+		/* 39 */ YY_NO_ANCHOR,
 		/* 40 */ YY_NOT_ACCEPT,
 		/* 41 */ YY_NOT_ACCEPT,
 		/* 42 */ YY_NOT_ACCEPT,
 		/* 43 */ YY_NOT_ACCEPT,
-		/* 44 */ YY_NOT_ACCEPT
+		/* 44 */ YY_NOT_ACCEPT,
+		/* 45 */ YY_NOT_ACCEPT,
+		/* 46 */ YY_NOT_ACCEPT,
+		/* 47 */ YY_NOT_ACCEPT
 	};
 	private int yy_cmap[] = unpackFromString(1,65538,
-"6:9,33,24,6:2,3,6:18,29,2,28,26:2,12,26,32,26:2,22,20,15,21,14,5,25:10,11,1" +
-"3,1,6,4,19,6,27:2,7,27:6,10,27:3,9,8,27:11,26,30,26:3,6,27:13,31,27:12,16,1" +
-"8,17,23,6:65409,0:2")[0];
+"6:9,33,13,6:2,3,6:18,29,2,28,26:2,12,26,32,26:2,23,21,16,22,15,5,25:10,11,1" +
+"4,1,26,4,20,26,27:2,7,27:6,10,27:3,9,8,27:11,26,30,26:3,6,27:13,31,27:12,17" +
+",19,18,24,6:65409,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,45,
-"0,1,2,1,3,1,4,5,1:14,6,1:5,7,1,8,1:2,9,10,1,11,12,13,14,15,16,17,18:2")[0];
+	private int yy_rmap[] = unpackFromString(1,48,
+"0,1,2,3,1:2,4,1:2,5,1:11,6,7,1:4,8,1,9,1:2,10,1,11,12,13,14,15,16,17,18,19," +
+"20,10,21,22,20")[0];
 
-	private int yy_nxt[][] = unpackFromString(19,34,
-"1,2,3,4,5,6,29,7,31:3,8,30,9,10,11,12,13,14,15,16,17,18,19,20,21,35,31,37,4" +
-",34,31,35,4,-1:36,28,-1:34,4,-1:25,4,-1:3,4,-1:5,22,-1:36,33,-1:26,22:2,-1," +
-"22:20,-1,22:9,-1,44,40,44,41,44:29,-1:12,23,-1:30,42,-1:52,25,-1:2,25:2,-1:" +
-"2,36:23,-1,36:3,24,36,39,36:3,-1,36:23,-1,36:3,24,38,39,36:3,-1,36:23,-1,36" +
-":3,26,36,39,36:3,-1:28,36,-1:2,36:2,-1:2,28:3,32,28:29,-1:4,28,-1:39,27,-1:" +
-"24,44,40,44,43,44:29");
+	private int yy_nxt[][] = unpackFromString(23,34,
+"1,2,28,3,4,35,5,6,30:3,7,37,8,9,10,11,12,13,14,15,16,17,18,19,20,28,30,39,3" +
+",29,30,28,3,-1:36,27,-1:34,3,-1:25,3,-1:3,3,-1:8,34,-1:38,31,-1:21,21:2,-1," +
+"21:9,-1,21:20,-1:13,33,-1:21,41,42,43,44,43:29,-1:28,24,-1:2,24:2,-1:3,27,-" +
+"1,27,-1:38,45,-1:29,21,-1:29,36:12,-1,36:14,23,36,40,36:3,-1:12,22,-1:22,36" +
+":12,-1,36:14,25,36,40,36:3,-1,36:12,-1,36:14,23,38,40,36:3,-1:28,36,-1:2,36" +
+":2,-1:2,27,-1,27:31,-1,46,42,43,32,43:29,-1,41,42,43:31,-1:10,26,-1:24,46,4" +
+"2,47:31");
 
 	public java_cup.runtime.Symbol next_token ()
 		throws java.io.IOException {
@@ -321,34 +332,35 @@ public class Lexico implements java_cup.runtime.Scanner {
 					case -2:
 						break;
 					case 2:
-						{
-    System.out.println("Este es un error lexico: "+yytext()+
-    ", en la linea: "+yyline+", en la columna: "+yychar);
-}
+						{return new Symbol(sym.SIGNO,yyline,yychar, yytext());}
 					case -3:
 						break;
 					case 3:
-						{return new Symbol(sym.PTCOMA,yyline,yychar, yytext());}
+						{}
 					case -4:
 						break;
 					case 4:
-						{}
+						{return new Symbol(sym.MENOR,yyline,yychar, yytext());}
 					case -5:
 						break;
 					case 5:
-						{return new Symbol(sym.MENOR,yyline,yychar, yytext());}
+						{
+    Errores err = new Errores(cont, "Léxico", "El caracter "+yytext()+" no pertenece al lenguaje", yyline, yychar);
+    cont++;
+    Errors.add(err);
+}
 					case -6:
 						break;
 					case 6:
-						{return new Symbol(sym.SIGNO,yyline,yychar, yytext());}
+						{return new Symbol(sym.LETRA,yyline,yychar, yytext());}
 					case -7:
 						break;
 					case 7:
-						{return new Symbol(sym.LETRA,yyline,yychar, yytext());}
+						{return new Symbol(sym.DOSPT,yyline,yychar, yytext());}
 					case -8:
 						break;
 					case 8:
-						{return new Symbol(sym.DOSPT,yyline,yychar, yytext());}
+						{yychar=1;}
 					case -9:
 						break;
 					case 9:
@@ -396,61 +408,59 @@ public class Lexico implements java_cup.runtime.Scanner {
 					case -20:
 						break;
 					case 20:
-						{yychar=1;}
+						{return new Symbol(sym.DIGITO,yyline,yychar, yytext());}
 					case -21:
 						break;
 					case 21:
-						{return new Symbol(sym.DIGITO,yyline,yychar, yytext());}
+						{}
 					case -22:
 						break;
 					case 22:
-						{}
+						{return new Symbol(sym.FIN,yyline,yychar, yytext());}
 					case -23:
 						break;
 					case 23:
-						{return new Symbol(sym.FIN,yyline,yychar, yytext());}
+						{return new Symbol(sym.PARRAF,yyline,yychar, yytext());}
 					case -24:
 						break;
 					case 24:
-						{return new Symbol(sym.PARRAF,yyline,yychar, yytext());}
+						{return new Symbol(sym.ESPECIAL,yyline,yychar, yytext());}
 					case -25:
 						break;
 					case 25:
-						{return new Symbol(sym.ESPECIAL,yyline,yychar, yytext());}
+						{return new Symbol(sym.ESPACIO,yyline,yychar, yytext());}
 					case -26:
 						break;
 					case 26:
-						{return new Symbol(sym.ESPACIO,yyline,yychar, yytext());}
+						{return new Symbol(sym.CONJ,yyline,yychar, yytext());}
 					case -27:
 						break;
-					case 27:
-						{return new Symbol(sym.CONJ,yyline,yychar, yytext());}
+					case 28:
+						{return new Symbol(sym.SIGNO,yyline,yychar, yytext());}
 					case -28:
 						break;
 					case 29:
 						{
-    System.out.println("Este es un error lexico: "+yytext()+
-    ", en la linea: "+yyline+", en la columna: "+yychar);
+    Errores err = new Errores(cont, "Léxico", "El caracter "+yytext()+" no pertenece al lenguaje", yyline, yychar);
+    cont++;
+    Errors.add(err);
 }
 					case -29:
 						break;
 					case 30:
-						{return new Symbol(sym.SIGNO,yyline,yychar, yytext());}
+						{return new Symbol(sym.LETRA,yyline,yychar, yytext());}
 					case -30:
 						break;
 					case 31:
-						{return new Symbol(sym.LETRA,yyline,yychar, yytext());}
+						{return new Symbol(sym.PTCOMA,yyline,yychar, yytext());}
 					case -31:
 						break;
 					case 32:
 						{}
 					case -32:
 						break;
-					case 34:
-						{
-    System.out.println("Este es un error lexico: "+yytext()+
-    ", en la linea: "+yyline+", en la columna: "+yychar);
-}
+					case 33:
+						{return new Symbol(sym.FIN,yyline,yychar, yytext());}
 					case -33:
 						break;
 					case 35:
@@ -460,6 +470,10 @@ public class Lexico implements java_cup.runtime.Scanner {
 					case 37:
 						{return new Symbol(sym.SIGNO,yyline,yychar, yytext());}
 					case -35:
+						break;
+					case 39:
+						{return new Symbol(sym.SIGNO,yyline,yychar, yytext());}
+					case -36:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);

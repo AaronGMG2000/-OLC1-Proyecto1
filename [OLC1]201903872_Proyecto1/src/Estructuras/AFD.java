@@ -21,6 +21,8 @@ import java.util.Map;
 public class AFD {
     HOJA cabeza;
     int ident = 1;
+    AFN afn;
+    int g = 0;
     Map<String, String> CONJ = new HashMap<>();
     List<String> alfabeto = new ArrayList<>();
     List<String> terminales = new ArrayList<>();
@@ -29,7 +31,7 @@ public class AFD {
     Map<String, String> lista_alfabeto = new HashMap<>();
     Map<Integer, String[]> siguientes = new HashMap<>();
     String terminal;
-    String nombre;
+    public String nombre;
     int num = 1;
     
     public AFD(HOJA cabeza, String nombre, Map<String, String> conjunto){
@@ -37,10 +39,16 @@ public class AFD {
         this.nombre = nombre;
         this.CONJ.putAll(conjunto);
         generarDatos();
+        CREARTRANSICIONES();
+        CrearAFN();
+    }
+    
+    public void GraficarTodo(){
         GRAFICARARBOL();
         GRAFICARSIGUIENTES();
-        CREARTRANSICIONES();
         GraficarAFD();
+        GRAFICARTRANSICIONES();
+        this.afn.GenerarArbol();
     }
     
     public void generarDatos(){
@@ -236,7 +244,7 @@ public class AFD {
                     + "<td>"+dato[2]+"</td>\n"
                     + "</tr>\n";
             }
-            String tabla = "<<table border = '0' cellboder = '1' cellspacing='0' cellpadding='10'>\n"
+            String tabla = "<<table border = '1' cellboder = '1' cellspacing='0' cellpadding='10'>\n"
                     + "<tr>\n"
                     + "<td COLSPAN='2'>HOJA</td>\n"
                     + "<td>Siguientes</td>\n"
@@ -253,7 +261,61 @@ public class AFD {
             System.out.println("error al crear la grafica");
         }  
     }
-
+    
+    public void GRAFICARTRANSICIONES(){
+        File directorio = new File("./TRANSICIONES_201903872");
+        if (!directorio.exists()) {
+            directorio.mkdirs();
+        }
+        FileWriter fichero;
+        PrintWriter escritor;
+        try
+        {
+            fichero = new FileWriter("./TRANSICIONES_201903872/"+nombre+".dot");
+            escritor = new PrintWriter(fichero);
+            escritor.print("digraph grafica{\n"
+                + "rankdir=LR;\n"
+                + "forcelabels= true;\n"
+                + "node [shape = plain];\n");
+            String td = "";
+            for(String[] y: lista_transiciones.values()){
+                td+="<tr>\n";
+                td+="<td> "+y[0]+" {"+y[1]+"} </td>\n";
+                for (String x: alfabeto) {
+                    boolean encontrado = false;
+                    for(String[] dato: this.transiciones){
+                        if (dato[2].equals(x) && y[0].equals(dato[0])) {
+                            td+="<td> "+dato[1]+" </td>\n";
+                            encontrado = true;
+                            break;
+                        }
+                    }
+                    if (!encontrado) {
+                        td+="<td> -- </td>\n";
+                    }
+                }
+                td+= "</tr>\n";
+            }
+            String tabla = "<<table border = '1' cellboder = '1' cellspacing='0' cellpadding='10'>\n"
+                    + "<tr>\n"
+                    + "<td>ESTADO</td>\n";
+            for (String x: alfabeto) {
+                tabla+="<td>"+x+"</td>\n";
+            }
+            tabla += "</tr>\n"
+                    + td
+                    + "</table>>";
+            String text = "nodo"+this.num+" [label = "+tabla+"];\n";
+            escritor.print(text);
+            escritor.print("\n}");
+            fichero.close();
+            Runtime rt = Runtime.getRuntime();
+            rt.exec( "dot -Tjpg -o ./TRANSICIONES_201903872/"+nombre+".jpg graf ./TRANSICIONES_201903872/"+nombre+".dot");
+        }catch(IOException e){
+            System.out.println("error al crear la grafica");
+        }
+    }
+    
     public void CREARTRANSICIONES(){
         String [] data = {"S0",this.cabeza.primeros};
         this.lista_transiciones.put(this.cabeza.primeros,data);
@@ -422,5 +484,37 @@ public class AFD {
             System.out.println("cadena: "+cadena+" no es valida con la expresion: "+this.nombre);
         }
         return respuesta;
+    }
+    
+    public void CrearAFN(){
+        this.afn = new AFN(_CrearAFN(cabeza.izquierda) , nombre);
+        afn.CREAR_AFN();
+    }
+    
+    public HOJA_AFN _CrearAFN(HOJA nodo){
+        if (!nodo.tipo.equals("hoja")){
+            String az = "";
+            String ad = "";
+            String alfa[] = null;
+            HOJA_AFN izquierda = null;
+            HOJA_AFN derecha = null;
+            if(nodo.izquierda!=null){
+                if(!nodo.izquierda.tipo.equals("hoja")){izquierda = _CrearAFN(nodo.izquierda);}
+                else{az = nodo.izquierda.dato;}
+            }
+            if(nodo.derecha!=null){
+            if(!nodo.derecha.tipo.equals("hoja")){derecha = _CrearAFN(nodo.derecha);}
+            else{ad = nodo.derecha.dato;}}
+            
+            if (!az.isEmpty() && !ad.isEmpty()) {
+                alfa = new String[2];
+                alfa[0] = az;
+                alfa[1] = ad;
+            }else if(!az.isEmpty()){alfa = new String[1]; alfa[0] = az;}
+            else if(!ad.isEmpty()){alfa = new String[1]; alfa[0] = ad;}
+            HOJA_AFN nueva = new HOJA_AFN(nodo.dato, alfa, izquierda, derecha, nodo.tipo);
+            return nueva;
+        }
+        return new HOJA_AFN(nodo.dato, null, null, null, nodo.tipo);
     }
 }
