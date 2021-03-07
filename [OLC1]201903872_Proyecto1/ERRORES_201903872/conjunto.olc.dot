@@ -4,7 +4,7 @@ forcelabels= true;
 node [shape = plain];
 TABLA [label = <<table border = '1' cellboder = '1' cellspacing='0' cellpadding='10'>
 <tr>
-<td COLSPAN = '5'>#</td>
+<td COLSPAN = '5'>TABLA DE ERRORES</td>
 </tr>
 <tr>
 <td>#</td>
@@ -36,13 +36,6 @@ TABLA [label = <<table border = '1' cellboder = '1' cellspacing='0' cellpadding=
 </tr>
 <tr>
 <td>3</td>
-<td>Sintáctico</td>
-<td>Error en operación no se esperaba el componente: :</td>
-<td>9</td>
-<td>6</td>
-</tr>
-<tr>
-<td>4</td>
 <td>Sintáctico</td>
 <td>Error en operación no se esperaba el componente: "</td>
 <td>21</td>

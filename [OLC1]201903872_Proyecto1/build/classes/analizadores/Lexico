@@ -12,6 +12,7 @@ import java.util.List;
 %char
 %cup 
 %unicode
+%ignorecase
 %{
     public List<Errores> Errors = new ArrayList<>();
     public int cont = 1;
