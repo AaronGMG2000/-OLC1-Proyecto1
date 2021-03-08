@@ -49,8 +49,9 @@ public class Validation {
 
     @Override
     public String toString() {
-        return "{\n" + "\t\"Valor\": \"" + Valor + "\",\n\t\"ExpresionRegular\": \"" + ExpresionRegular + "\",\n\t\"Resultado\": \"" + Resultado + "\"\n},\n";
+        return "Validation{" + "Valor=" + Valor + ", ExpresionRegular=" + ExpresionRegular + ", Resultado=" + Resultado + '}';
     }
 
+    
     
 }

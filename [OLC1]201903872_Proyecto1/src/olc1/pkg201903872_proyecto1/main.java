@@ -26,7 +26,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
+import Estructuras.NumeroLinea;
+import com.google.gson.Gson;
 /**
  *
  * @author Marro
@@ -554,6 +555,10 @@ public class main extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         analizadores.Sintactico pars;
         try {
+            File directorio = new File("./SALIDAS_201903872");
+            if (!directorio.exists()) {
+                directorio.mkdirs();
+            }
             errors.clear();
             Lexico lexical = new analizadores.Lexico(new StringReader(Editor.getText()));
             pars=new analizadores.Sintactico(lexical);
@@ -566,28 +571,35 @@ public class main extends javax.swing.JFrame {
             List<String[]> comprobaciones = pars.Validacion;
             FileWriter fichero;
             PrintWriter escritor;
+            Gson g = new Gson();
             fichero = new FileWriter("./SALIDAS_201903872/"+name+".json");
             escritor = new PrintWriter(fichero);
+            escritor.print("[\n");
+            int cont = 0;
             for(String[]x: comprobaciones){
                 if (arboles.get(x[0])!=null) {
                     
                     if(arboles.get(x[0]).ValidarCadena(x[1])){
                         Validation val = new Validation(x[1],x[0], "Cadena Válida");
-                        escritor.print(val.toString());
+                        if (cont<comprobaciones.size()-1) {
+                            escritor.print(g.toJson(val)+",\n");
+                        }else{
+                            escritor.print(g.toJson(val)+"\n");
+                        }
                         consola.setText(consola.getText()+"\n");
                         consola.setText(consola.getText()+"La expresión: \""+x[1]+"\" es válida con la expresión Regular "+x[0]);
                     }else{
                         consola.setText(consola.getText()+"\n");
                         consola.setText(consola.getText()+"La expresión: \""+x[1]+"\" es inválida con la expresión Regular "+x[0]);
                     }
+
                 }else{
                     System.out.println("No existe el automata");
                 }
+                cont++;
             }
-            File directorio = new File("./SALIDAS_201903872");
-            if (!directorio.exists()) {
-                directorio.mkdirs();
-            }
+            escritor.print("]\n");
+            
             fichero.close();
             jButton7.setEnabled(true);
         } catch (Exception ex) {

@@ -42,11 +42,7 @@ public class AFN {
                     transiciones.add(tran);
                     nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], "no");
                     if(anterior.isEmpty()){
-                        nodo.hijos[2].identificador = "S"+ident;
-                        ident++;
-                        HOJA_AFN[] tran2 = {nodo.hijos[1].fin, nodo.hijos[2]};
-                        transiciones.add(tran2);
-                        nodo.fin = nodo.hijos[2];
+                        nodo.fin = nodo.hijos[1].fin;
                     }else{
                         nodo.fin = nodo.hijos[1].fin;
                     }
@@ -76,11 +72,7 @@ public class AFN {
                         nodo.hijos[1] = _CREAR_AFN(nodo.hijos[1], "no");
                         
                         if(anterior.isEmpty()){
-                            nodo.hijos[2].identificador = "S"+ident;
-                            ident++;
-                            HOJA_AFN[] tran1 = {nodo.hijos[1].fin, nodo.hijos[2]};
-                            transiciones.add(tran1);
-                            nodo.fin = nodo.hijos[2];
+                            nodo.fin = nodo.hijos[1].fin;
                         }else{
                             nodo.fin = nodo.hijos[1].fin;
                         }
@@ -107,7 +99,7 @@ public class AFN {
                     
                 }
                 if(anterior.isEmpty()){
-                    this.aceptacion = nodo.hijos[2].identificador;
+                    this.aceptacion = nodo.fin.identificador;
                 }else{
                     nodo.identificador = nodo.hijos[0].identificador;
                 }
