@@ -1,0 +1,6 @@
+CONJ
+:
+digito
+->
+d
+;
