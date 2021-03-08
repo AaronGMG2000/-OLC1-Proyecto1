@@ -1,6 +1,0 @@
-CONJ
-:
-digito
-->
-d
-;
